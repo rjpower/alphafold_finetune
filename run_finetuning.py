@@ -443,7 +443,7 @@ def train_step(model_params, key, batch, structure_flag):
 def norm_grads_per_example(grads, l2_norm_clip=0.1):
     nonempty_grads, tree_def = jax.tree_util.tree_flatten(grads)
     total_grad_norm = jnp.linalg.norm(
-        [jnp.linalg.norm(neg.ravel()) for neg in nonempty_grads]
+        jnp.asarray([jnp.linalg.norm(neg.ravel()) for neg in nonempty_grads])
     )
     divisor = jnp.maximum(total_grad_norm / l2_norm_clip, 1.0)
     normalized_nonempty_grads = [g / divisor for g in nonempty_grads]
